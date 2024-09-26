@@ -174,7 +174,7 @@ function App() {
         )}
       </div>
 
-      <button
+      <button className='logout-button'
         onClick={() => {
           setApiToken('');
           localStorage.removeItem('apiToken');
