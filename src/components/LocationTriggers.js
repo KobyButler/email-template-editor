@@ -79,52 +79,54 @@ function LocationTriggers({ locations }) {
                     return (
                         <div key={location.id}>
                             <h4>Location: {location.name}</h4>
-                            <table className="trigger-table">
-                                <thead>
-                                    <tr>
-                                        <th>Module Key</th>
-                                        <th>Emails</th>
-                                        <th>Associated Workflows</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {emailModulesWithEmails.map((emailModule) => {
-                                        const includeBcc = emailModule.email?.include_bcc || '';
-                                        const emails = includeBcc
-                                            .split(',')
-                                            .map((email) => email.trim())
-                                            .filter(Boolean);
-                                        const moduleName = emailModule.key;
-                                        const moduleKey = emailModule.key;
-                                        const associatedWorkflows = workflowsMap[moduleKey] || [];
+                            <div className="table-container">
+                                <table className="trigger-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Module Key</th>
+                                            <th>Emails</th>
+                                            <th>Associated Workflows</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {emailModulesWithEmails.map((emailModule) => {
+                                            const includeBcc = emailModule.email?.include_bcc || '';
+                                            const emails = includeBcc
+                                                .split(',')
+                                                .map((email) => email.trim())
+                                                .filter(Boolean);
+                                            const moduleName = emailModule.key;
+                                            const moduleKey = emailModule.key;
+                                            const associatedWorkflows = workflowsMap[moduleKey] || [];
 
-                                        return (
-                                            <tr key={moduleKey}>
-                                                <td>{moduleName}</td>
-                                                <td>
-                                                    {emails.map((email, idx) => (
-                                                        <span key={idx}>
-                                                            {email}
-                                                            {idx < emails.length - 1 && ', '}
-                                                        </span>
-                                                    ))}
-                                                </td>
-                                                <td>
-                                                    {associatedWorkflows.length > 0 ? (
-                                                        <ul className="workflow-list">
-                                                            {associatedWorkflows.map((workflow, idx) => (
-                                                                <li key={idx}>{workflow}</li>
-                                                            ))}
-                                                        </ul>
-                                                    ) : (
-                                                        'No workflows found'
-                                                    )}
-                                                </td>
-                                            </tr>
-                                        );
-                                    })}
-                                </tbody>
-                            </table>
+                                            return (
+                                                <tr key={moduleKey}>
+                                                    <td>{moduleName}</td>
+                                                    <td>
+                                                        {emails.map((email, idx) => (
+                                                            <span key={idx}>
+                                                                {email}
+                                                                {idx < emails.length - 1 && ', '}
+                                                            </span>
+                                                        ))}
+                                                    </td>
+                                                    <td>
+                                                        {associatedWorkflows.length > 0 ? (
+                                                            <ul className="workflow-list">
+                                                                {associatedWorkflows.map((workflow, idx) => (
+                                                                    <li key={idx}>{workflow}</li>
+                                                                ))}
+                                                            </ul>
+                                                        ) : (
+                                                            'No workflows found'
+                                                        )}
+                                                    </td>
+                                                </tr>
+                                            );
+                                        })}
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     );
                 } else {

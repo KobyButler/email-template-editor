@@ -49,22 +49,22 @@
 /* Set specific widths for columns */
 .company-trigger-table th:nth-child(1),
 .company-trigger-table td:nth-child(1) {
-    width: 5%;
+    width: 2%;
 }
 
 .company-trigger-table th:nth-child(2),
 .company-trigger-table td:nth-child(2) {
-    width: 40%;
+    width: 28%;
 }
 
 .company-trigger-table th:nth-child(3),
 .company-trigger-table td:nth-child(3) {
-    width: 35%;
+    width: 20%;
 }
 
 .company-trigger-table th:nth-child(4),
 .company-trigger-table td:nth-child(4) {
-    width: 20%;
+    width: 50%;
 }
 
 .criteria-list {

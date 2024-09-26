@@ -39,17 +39,17 @@
 
 .trigger-table th:nth-child(1),
 .trigger-table td:nth-child(1) {
-    width: 5%;
+    width: 15%;
 }
 
 .trigger-table th:nth-child(2),
 .trigger-table td:nth-child(2) {
-    width: 35%;
+    width: 25%;
 }
 
 .trigger-table th:nth-child(3),
 .trigger-table td:nth-child(3) {
-    width: 40%;
+    width: 60%;
 }
 
 .workflow-list {
