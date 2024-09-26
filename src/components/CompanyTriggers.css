@@ -1,0 +1,89 @@
+/* src/components/CompanyTriggers.css */
+
+/* Container to manage table overflow */
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+    /* Allows horizontal scrolling if needed */
+}
+
+/* Table styles */
+.company-trigger-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    table-layout: fixed;
+    /* Enables fixed table layout */
+}
+
+/* Table cells */
+.company-trigger-table th,
+.company-trigger-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    word-wrap: break-word;
+    /* Break long words */
+    word-break: break-word;
+    /* For older browsers */
+    overflow-wrap: break-word;
+    /* Ensures long words break */
+    white-space: normal;
+    /* Allows text to wrap */
+}
+
+/* Header styles */
+.company-trigger-table th {
+    background-color: #f2f2f2;
+    text-align: left;
+}
+
+/* Row styles */
+.company-trigger-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.company-trigger-table tr:hover {
+    background-color: #e6f7ff;
+}
+
+/* Set specific widths for columns */
+.company-trigger-table th:nth-child(1),
+.company-trigger-table td:nth-child(1) {
+    width: 5%;
+}
+
+.company-trigger-table th:nth-child(2),
+.company-trigger-table td:nth-child(2) {
+    width: 40%;
+}
+
+.company-trigger-table th:nth-child(3),
+.company-trigger-table td:nth-child(3) {
+    width: 35%;
+}
+
+.company-trigger-table th:nth-child(4),
+.company-trigger-table td:nth-child(4) {
+    width: 20%;
+}
+
+.criteria-list {
+    margin: 0;
+    padding-left: 20px;
+}
+
+.criteria-list li {
+    list-style-type: disc;
+    margin: 0;
+}
+
+.email-list {
+    margin: 0;
+    padding-left: 20px; /* Indent the bullet points */
+  }
+  
+  .email-list li {
+    list-style-type: none;
+    margin: 0;
+  }
+  

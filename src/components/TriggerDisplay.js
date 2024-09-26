@@ -13,7 +13,10 @@ function TriggerDisplay({ triggerData }) {
     return (
         <div>
             <h2>Company: {company.name}</h2>
-            <CompanyTriggers triggers={company.triggers} />
+            <CompanyTriggers
+                triggers={company.triggers}
+                locations={company.locations.edges}
+            />
             <LocationTriggers locations={company.locations.edges} />
         </div>
     );

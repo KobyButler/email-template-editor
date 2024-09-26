@@ -22,7 +22,7 @@ h3 {
   font-size: 1.5em;
   text-align: center;
   color: red;
-  font-style:italic;
+  font-style: italic;
 }
 
 h4 {
@@ -67,10 +67,10 @@ h5 {
   list-style: none;
   margin-top: 10px;
   padding: 0;
-  width: 300px;
+  width: 320px;
   border: 1px solid #ddd;
   border-radius: 5px;
-  background-color: #fff;
+  background-color: lightgoldenrodyellow;
 }
 
 .suggestions-list li {
@@ -96,8 +96,10 @@ button {
   border-radius: 5px;
   cursor: pointer;
   font-size: 1em;
-  margin-top: 10px;
   transition: background-color 0.3s ease;
+  top: 25px;
+  position: absolute;
+  width: 100px;
 }
 
 button:hover {

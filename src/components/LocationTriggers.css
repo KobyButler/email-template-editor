@@ -11,3 +11,54 @@
     list-style-type: disc;
     margin-left: 20px;
 }
+
+.trigger-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.trigger-table th,
+.trigger-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+.trigger-table th {
+    background-color: #f2f2f2;
+    text-align: left;
+}
+
+.trigger-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.trigger-table tr:hover {
+    background-color: #e6f7ff;
+}
+
+.trigger-table th:nth-child(1),
+.trigger-table td:nth-child(1) {
+    width: 5%;
+}
+
+.trigger-table th:nth-child(2),
+.trigger-table td:nth-child(2) {
+    width: 35%;
+}
+
+.trigger-table th:nth-child(3),
+.trigger-table td:nth-child(3) {
+    width: 40%;
+}
+
+.workflow-list {
+    margin: 0;
+    padding-left: 20px;
+    /* Indent the bullet points */
+}
+
+.workflow-list li {
+    list-style-type: disc;
+    margin: 0;
+}

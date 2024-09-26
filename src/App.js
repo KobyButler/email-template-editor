@@ -75,6 +75,8 @@ function App() {
                   node {
                     id
                     name
+                    demo
+                    active
                     workflow {
                       body
                     }
