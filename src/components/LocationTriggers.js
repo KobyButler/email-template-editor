@@ -1,10 +1,11 @@
+// src/components/LocationTriggers.js
 import React from 'react';
 import './LocationTriggers.css';
 
 function LocationTriggers({ locations }) {
-    // Filter out inactive locations
-    const demoLocations = locations.filter(({ node: location }) => location.demo === 'false');
-    const activeLocations = demoLocations.filter(({ node: location }) => location.active);
+    // Filter out demo locations and inactive locations
+    const nonDemoLocations = locations.filter(({ node: location }) => location.demo !== 'true'); // Adjust based on your data type
+    const activeLocations = nonDemoLocations.filter(({ node: location }) => location.active);
 
     // If no active locations, display a message
     if (activeLocations.length === 0) {
@@ -65,17 +66,41 @@ function LocationTriggers({ locations }) {
                     });
                 });
 
-                // Filter emailModules to include only those with emails
-                const emailModulesWithEmails = emailModules.filter((emailModule) => {
-                    const includeBcc = emailModule.email?.include_bcc || '';
-                    const emails = includeBcc
-                        .split(',')
-                        .map((email) => email.trim())
-                        .filter(Boolean);
-                    return emails.length > 0;
-                });
+                // Build an array of email modules with emails and their combined emails
+                const emailModulesWithEmailsAndWorkflows = emailModules
+                    .map((emailModule) => {
+                        const includeBcc = emailModule.email?.include_bcc || '';
+                        const sendToTextDefault = emailModule.email?.send_to_text_default || '';
 
-                if (emailModulesWithEmails.length > 0) {
+                        // Split and clean emails from includeBcc
+                        const includeBccEmails = includeBcc
+                            .split(',')
+                            .map((email) => email.trim())
+                            .filter(Boolean);
+
+                        // Split and clean emails from sendToTextDefault
+                        const sendToTextDefaultEmails = sendToTextDefault
+                            .split(',')
+                            .map((email) => email.trim())
+                            .filter(Boolean);
+
+                        // Combine both email arrays
+                        const emails = [...includeBccEmails, ...sendToTextDefaultEmails];
+
+                        // Get associated workflows
+                        const moduleKey = emailModule.key;
+                        const associatedWorkflows = workflowsMap[moduleKey] || [];
+
+                        // Only include if there are emails and associated workflows
+                        if (emails.length > 0 && associatedWorkflows.length > 0) {
+                            return { emailModule, emails, associatedWorkflows };
+                        } else {
+                            return null;
+                        }
+                    })
+                    .filter(Boolean); // Remove any null entries
+
+                if (emailModulesWithEmailsAndWorkflows.length > 0) {
                     return (
                         <div key={location.id}>
                             <h4>Location: {location.name}</h4>
@@ -89,15 +114,9 @@ function LocationTriggers({ locations }) {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {emailModulesWithEmails.map((emailModule) => {
-                                            const includeBcc = emailModule.email?.include_bcc || '';
-                                            const emails = includeBcc
-                                                .split(',')
-                                                .map((email) => email.trim())
-                                                .filter(Boolean);
+                                        {emailModulesWithEmailsAndWorkflows.map(({ emailModule, emails, associatedWorkflows }) => {
                                             const moduleName = emailModule.key;
                                             const moduleKey = emailModule.key;
-                                            const associatedWorkflows = workflowsMap[moduleKey] || [];
 
                                             return (
                                                 <tr key={moduleKey}>
@@ -111,15 +130,11 @@ function LocationTriggers({ locations }) {
                                                         ))}
                                                     </td>
                                                     <td>
-                                                        {associatedWorkflows.length > 0 ? (
-                                                            <ul className="workflow-list">
-                                                                {associatedWorkflows.map((workflow, idx) => (
-                                                                    <li key={idx}>{workflow}</li>
-                                                                ))}
-                                                            </ul>
-                                                        ) : (
-                                                            'No workflows found'
-                                                        )}
+                                                        <ul className="workflow-list">
+                                                            {associatedWorkflows.map((workflow, idx) => (
+                                                                <li key={idx}>{workflow}</li>
+                                                            ))}
+                                                        </ul>
                                                     </td>
                                                 </tr>
                                             );
@@ -130,7 +145,7 @@ function LocationTriggers({ locations }) {
                         </div>
                     );
                 } else {
-                    return null; // Don't render this location if no email modules with emails
+                    return null; // Don't render this location if no email modules with emails and workflows
                 }
             })}
         </div>
