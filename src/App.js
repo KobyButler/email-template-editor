@@ -205,7 +205,7 @@ function App() {
 
   return (
     <div className="app-container">
-      <h1>Email Trigger Editor</h1>
+      <h1>Email Triggers</h1>
       <div className="search-container">
         <input
           type="text"
