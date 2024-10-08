@@ -16,6 +16,7 @@ function TriggerDisplay({ triggerData }) {
             <CompanyTriggers
                 triggers={company.triggers}
                 locations={company.locations.edges}
+                users={company.users.edges}
             />
             <LocationTriggers locations={company.locations.edges} />
         </div>

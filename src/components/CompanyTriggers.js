@@ -1,7 +1,7 @@
 import React from 'react';
 import './CompanyTriggers.css';
 
-function CompanyTriggers({ triggers, locations }) {
+function CompanyTriggers({ triggers, locations, users }) {
     if (!triggers || triggers.length === 0) {
         return (
             <div>
@@ -10,6 +10,29 @@ function CompanyTriggers({ triggers, locations }) {
             </div>
         );
     }
+
+    if (!users || users.length === 0) {
+        return (
+            <div>
+                <h3>Company-Level Triggers</h3>
+                <p>Loading users...</p>
+            </div>
+        );
+    }
+
+    const userMap = {};
+    if (users && users.length > 0) {
+        users.forEach(({ node: user }) => {
+            if (user && user.id) {
+                userMap[user.id] = `${user.name}—${user.email}` || `${user.name}`;
+                console.log('User Mapped:', userMap[user.id]);
+            } else {
+                console.warn('Undefined user found:', user);
+            }
+        });
+    } else {
+        console.warn('No users available to map.');
+    }    
 
     const locationMap = {};
     locations.forEach(({ node: location }) => {
@@ -53,6 +76,17 @@ function CompanyTriggers({ triggers, locations }) {
                         return `Location: ${locationName}`;
                     }
 
+                    // Handle "user_id" key
+                    if (key === 'user_id') {
+                        const userDetail = userMap[value];
+                        if (userDetail) {
+                            return `User: ${userDetail}`;
+                        } else {
+                            console.warn(`User ID ${value} not found in userMap`);
+                            return `User: ID ${value} (INACTIVE USER ACCOUNT)`;
+                        }
+                    }
+
                     // Handle "check_in" key
                     if (key === 'check_in') {
                         const conditionValue = value;
@@ -89,8 +123,14 @@ function CompanyTriggers({ triggers, locations }) {
                     }
 
                     // Default handling
-                    const condition = Object.keys(value)[0];
-                    const conditionValue = value[condition] || value;
+                    let conditionValue;
+                    if (typeof value === 'object' && value !== null) {
+                        const condition = Object.keys(value)[0];
+                        conditionValue = value[condition];
+                    } else {
+                        conditionValue = value;
+                    }
+
                     return `${displayKey}: ${conditionValue}`;
                 }
             );

@@ -49,11 +49,10 @@ function LocationTriggers({ locations }) {
                             // If option.value is a boolean or number, convert it to a string
                             moduleKeys = [option.value.toString()];
                         } else {
-                            // option.value is null or undefined, skip processing
-                            console.warn(
+                            /*console.warn(
                                 'Skipping option with null or undefined value:',
                                 option
-                            );
+                            );*/
                             return;
                         }
 

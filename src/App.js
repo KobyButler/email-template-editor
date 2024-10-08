@@ -61,24 +61,28 @@ function App() {
   const fetchTriggerData = async (companyName) => {
     setLoading(true);
     setError(null);
+    setTriggerData(null); // Reset triggerData
 
-    const query = `
-      {
-        companies(first: 1, name: "${companyName}") {
-          edges {
-            node {
-              id
-              name
-              triggers
-              locations {
-                edges {
-                  node {
-                    id
-                    name
-                    demo
-                    active
-                    workflow {
-                      body
+    try {
+      // Step 1: Fetch company data without users
+      const companyQuery = `
+        {
+          companies(first: 1, name: "${companyName}") {
+            edges {
+              node {
+                id
+                name
+                triggers
+                locations {
+                  edges {
+                    node {
+                      id
+                      name
+                      demo
+                      active
+                      workflow {
+                        body
+                      }
                     }
                   }
                 }
@@ -86,32 +90,90 @@ function App() {
             }
           }
         }
-      }
-    `;
+      `;
 
-    try {
-      const response = await fetch('https://api.record360.com/v2', {
+      const companyResponse = await fetch('https://api.record360.com/v2', {
         method: 'POST',
         headers: {
           Authorization: 'Bearer ' + apiToken,
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ query }),
+        body: JSON.stringify({ query: companyQuery }),
       });
 
-      const data = await response.json();
-      const companyData = data.data.companies.edges[0]?.node;
+      const companyDataJson = await companyResponse.json();
+      const companyData = companyDataJson.data.companies.edges[0]?.node;
 
-      if (companyData) {
-        setTriggerData(companyData);
-      } else {
+      if (!companyData) {
         setTriggerData(null);
         setError('Company not found.');
+        setLoading(false);
+        return;
       }
+
+      // Step 2: Fetch all users with pagination
+      let allUsers = [];
+      let hasNextPage = true;
+      let afterCursor = null;
+
+      while (hasNextPage) {
+        const usersQuery = `
+          {
+            companies(first: 1, name: "${companyName}") {
+              edges {
+                node {
+                  users(first: 100, ${afterCursor ? `after: "${afterCursor}"` : ''}) {
+                    edges {
+                      cursor
+                      node {
+                        id
+                        name
+                        email
+                      }
+                    }
+                    pageInfo {
+                      endCursor
+                      hasNextPage
+                    }
+                  }
+                }
+              }
+            }
+          }
+        `;
+
+        const usersResponse = await fetch('https://api.record360.com/v2', {
+          method: 'POST',
+          headers: {
+            Authorization: 'Bearer ' + apiToken,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ query: usersQuery }),
+        });
+
+        const usersDataJson = await usersResponse.json();
+        const usersData = usersDataJson.data.companies.edges[0]?.node.users;
+
+        if (usersData) {
+          allUsers = allUsers.concat(usersData.edges);
+          console.log(`Total users fetched: ${allUsers.length}`);
+
+          hasNextPage = usersData.pageInfo.hasNextPage;
+          afterCursor = usersData.pageInfo.endCursor;
+        } else {
+          hasNextPage = false;
+        }
+      }
+
+      // Step 3: Update companyData with all users
+      companyData.users = { edges: allUsers };
+
+      // Step 4: Set triggerData and loading state
+      setTriggerData(companyData);
+      setLoading(false);
     } catch (error) {
       console.error('Error fetching trigger data:', error);
       setError('Error fetching trigger data.');
-    } finally {
       setLoading(false);
     }
   };
@@ -164,6 +226,7 @@ function App() {
                   setCompanyName(name);
                   setInputValue(name);
                   setCompanySuggestions([]);
+                  setTriggerData(null);
                   fetchTriggerData(name);
                 }}
               >
